@@ -1,0 +1,115 @@
+<div class="row">
+	<div class="col-md-4 text-left">
+		<button type="button" class="btn btn-default" ng-click="novoParticipante()" ng-hide="participante">Novo</button>
+	</div>
+	<div class="col-md-4 col-md-offset-4 text-right">
+		<input type="text"	ng-model="criterioDeBusca" class="form-control" ng-hide="participante" placeholder="O que vc esta buscando?"/>
+	</div>
+
+</div>
+
+<div class="row">	
+	<div class="col-md-12">
+		<div class="table-responsive">
+			<table class="table table-striped table-hover" ng-hide="participante" ng-show="participantes.length>0">
+				<thead>
+					<tr>
+						<th class="text-center">Nome</th>
+						<th class="text-center">Cidade</th>
+						<th class="text-center">Status</th>
+						<th class="text-center">Data Cadastro</th>
+						<th class="text-center">Editar</th>
+						<th class="text-center">Apagar</th>
+						<th class="text-center">Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="participante in participantes | orderBy:['data_cadastro']| filter:criterioDeBusca | inicioPaginacao:paginaAtual*paginaTamanho | limitTo:paginaTamanho" ng-class="{'danger': participante.status == 2}" class="text-center">
+						<td>{{participante.nome}}</td>
+						<td>{{participante.cidade}}</td>
+						<td>{{participante.status | status}}</td>
+						<td>{{participante.data_cadastro | date:'dd/MM/yyyy HH:mm'}}
+						<td><button type="button" class="btn btn-default" ng-click="editarParticipante(participante)">Editar</button></td>
+						<td><button type="button" class="btn btn-danger" ng-click="removerParticipante(participante)"><i class="glyphicon glyphicon-minus"></i></button></td>
+						<td ng-hide="verificarStatus(participante.status )"><button type="button" class="btn btn-success" ng-click="atualizarStatus(participante)"><i class="glyphicon glyphicon-ok"></i></button></td>
+						<td ng-show="verificarStatus(participante.status )"><button type="button" class="btn btn-warning" ng-click="atualizarStatus(participante)"><i class="glyphicon glyphicon-remove"></i></button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="row" ng-hide="participante">
+	<div class="col-md-12 text-right">
+	    <button ng-disabled="paginaAtual == 0" ng-click="paginaAtual=paginaAtual-1" class="btn btn-default">
+	        <<
+	    </button>
+	    {{paginaAtual+1}}/{{numeroDePaginas()}}
+	    <button ng-disabled="paginaAtual >= participantes.length/paginaTamanho - 1" ng-click="paginaAtual=paginaAtual+1" class="btn btn-default">
+	        >>
+	    </button>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<form ng-submit="salvarParticipante()" role="form" ng-show="participante">
+			<div class="row">
+				<div class="col-md-12">
+					<legend>Novo Participante</legend>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-3 form-group">
+					<label for="nome">Nome:</label>
+					<input type="text" class="form-control" id="nome" name="nome" ng-model="participante.nome">
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="nome">Telefone:</label>
+					<input type="text" class="form-control" id="telefone" name="telefone" ng-model="participante.telefone">
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="nome">Celular:</label>
+					<input type="text" class="form-control" id="celular" name="celular" ng-model="participante.celular">
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="nome">E-mail:</label>
+					<input type="email" class="form-control" id="email" name="email" ng-model="participante.email">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 form-group">
+					<label for="nome">Site:</label>
+					<input type="text" class="form-control" id="site" name="site" ng-model="participante.site">
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="nome">Rua:</label>
+					<input type="text" class="form-control" id="rua" name="rua" ng-model="participante.rua">
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="nome">Bairro:</label>
+					<input type="text" class="form-control" id="bairro" name="bairro" ng-model="participante.bairro">
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="nome">Cidade:</label>
+					<input type="text" class="form-control" id="cidade" name="cidade" ng-model="participante.cidade">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 form-group">
+					<label for="nome">Complemento do endereço:</label>
+					<textarea class="form-control" id="complemento" name="complemento" ng-model="participante.complemento">
+					</textarea>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-primary">Salvar</button>
+					<button type="button" class="btn btn-default" ng-click="voltarLista()">Voltar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
